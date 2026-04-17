@@ -1,0 +1,18 @@
+{
+  "flexipay": {
+    "name": "FlexiPay UK",
+    "botName": "Tax Assistant",
+    "primaryColor": "#1a365d",
+    "systemPrompt": "You are a UK tax expert for FlexiPay. Help with VAT and PAYE.",
+    "bookingUrl": "https://flexipay.uk/contact",
+    "leadEmail": "leads@flexipay.uk"
+  },
+  "caramel": {
+    "name": "Caramel Web Studios",
+    "botName": "CWS Assistant",
+    "primaryColor": "#EAB308",
+    "systemPrompt": "You are a web design expert. Help clients with SEO and React apps.",
+    "bookingUrl": "https://caramelwebstudios.com/book",
+    "leadEmail": "info@caramelwebstudios.com"
+  }
+}
