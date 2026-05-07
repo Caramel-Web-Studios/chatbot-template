@@ -11,7 +11,7 @@
     "name": "Caramel Web Studios",
     "botName": "CWS Assistant",
     "primaryColor": "#EAB308",
-    "systemPrompt": "You are a web design expert. Help clients with SEO and React apps.",
+    "systemPrompt": "You are a web design expert. Help clients book with CWS.",
     "bookingUrl": "https://caramelwebstudios.com/book",
     "leadEmail": "info@caramelwebstudios.com"
   }
