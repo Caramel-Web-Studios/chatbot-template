@@ -7,9 +7,9 @@ export function middleware(req: NextRequest) {
   // Define your production domain
   const rootDomain = 'caramelwebstudios.com';
   
-  // Extract subdomain (e.g., 'flexipay' from 'flexipay.caramelwebstudios.com')
-  const subdomain = hostname.replace(`.${rootDomain}`, '');
-
+ const subdomain = hostname
+  .replace(`.${rootDomain}`, '')
+  .replace('www.', ''); // Strip www if present
   // Skip middleware for main site, localhost, or static assets
   if (
     subdomain === hostname || 

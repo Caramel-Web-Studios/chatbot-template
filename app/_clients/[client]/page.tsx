@@ -1,18 +1,19 @@
-import dynamic from 'next/dynamic';
-import clients from "@/config/clients.json";
-import { notFound } from "next/navigation";
 
-// This forces the component to ONLY load on the client side
-const ChatWidget = dynamic(() => import('@/components/ChatWidget'), { 
-  ssr: false,
-  // Optional: show a small placeholder while loading
-  loading: () => <div className="fixed bottom-6 right-6 p-4">...</div> 
-});
+import { prisma } from "@/lib/prisma";
+import { redirect } from "next/navigation";
+import ChatWidget from '@/components/ChatWidget';
 
-export default function ClientPage({ params }: { params: { client: string } }) {
-  const clientData = clients[params.client as keyof typeof clients];
-  if (!clientData) return notFound();
 
+export default async function ClientPage({ params }: { params: { client: string } }) {
+ // Fetch client by slug (the folder name in the URL)
+  const clientData = await prisma.client.findUnique({
+    where: { slug: params.client }
+  });
+  
+ if (!clientData) {
+  // Instead of a generic 404, redirect to your main landing page
+  return redirect('https://caramelwebstudios.com');
+}
   return (
     <main className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
       <div className="text-center">
@@ -20,7 +21,8 @@ export default function ClientPage({ params }: { params: { client: string } }) {
           {clientData.name}
         </h1>
       </div>
-      <ChatWidget config={clientData} />
+   {/* Pass the data from the DB to the widget */}
+      <ChatWidget config={clientData} clientSlug={params.client} />
     </main>
   );
 }

@@ -1,19 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
-import clients from "@/config/clients.json"; // 1. Import the whole JSON object
+import { prisma } from "@/lib/prisma";
+
 
 export async function POST(req: NextRequest) {
   try {
-    const { messages, clientHandle } = await req.json();
+    const { messages, clientSlug} = await req.json();
 
-    // 2. Find the client in your JSON "database"
-    // We look for the entry where the 'name' matches the 'clientHandle' sent by the widget
-    const clientConfig = Object.values(clients).find(
-      (c) => c.name === clientHandle
-    );
+   // Fetch config from DB based on the URL slug
+    const clientConfig = await prisma.client.findUnique({
+      where: { slug: clientSlug }
+    });
 
-    // 3. Fallback to a default prompt if the client isn't found
-    const systemPrompt = clientConfig?.systemPrompt || "You are a helpful AI assistant.";
-
+    if (!clientConfig) {
+      return NextResponse.json({ error: "Client not found" }, { status: 404 });
+    }
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify({
         model: "gpt-4o-mini",
         messages: [
-          { role: "system", content: systemPrompt },
+          { role: "system", content: clientConfig.systemPrompt },
           ...messages
         ],
         temperature: 0.2,
@@ -38,7 +38,6 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ reply: data.choices[0].message.content });
   } catch (error) {
-    console.error("Chat Error:", error);
     return NextResponse.json({ error: "Failed to process chat" }, { status: 500 });
   }
 }

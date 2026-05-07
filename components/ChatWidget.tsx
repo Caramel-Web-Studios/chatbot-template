@@ -10,6 +10,7 @@ interface ChatWidgetProps {
     bookingUrl: string;
     initialMessage?: string;
   };
+  clientSlug: string;
 }
 
 export default function ChatWidget({ config }: ChatWidgetProps) {
@@ -42,12 +43,16 @@ export default function ChatWidget({ config }: ChatWidgetProps) {
         method: "POST",
         body: JSON.stringify({ 
           messages: [...messages, userMsg],
-          clientHandle: config.name 
+         clientSlug: clientSlug
         }),
       });
       const data = await res.json();
-      setMessages(prev => [...prev, { role: "assistant", content: data.reply }]);
-    } catch {
+    if (data.reply) {
+        setMessages(prev => [...prev, { role: "assistant", content: data.reply }]);
+      } else {
+        throw new Error();
+      }
+     } catch {
       setMessages(prev => [...prev, { role: "assistant", content: "Service temporarily unavailable." }]);
     } finally {
       setIsLoading(false);
