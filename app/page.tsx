@@ -1,32 +1,44 @@
+// app/page.tsx
+import { prisma } from "@/lib/prisma";
 import ChatWidget from "@/components/ChatWidget";
 
-export default function Home() {
-  // Create a default config for the preview page
-  const demoConfig = {
-    name: "Caramel Web Studios",
-    botName: "Caramel Assistant",
-    primaryColor: "#EAB308", // Your brand gold
-    bookingUrl: "https://caramelwebstudios.com/contact",
-    initialMessage: "Welcome to the Caramel AI Template. How can I help you build your next project?"
-  };
+export default async function DemoPage() {
+  // 1. Fetch your "Flagship" client to act as the demo
+  // Make sure you have a client with the slug 'cws' (or your preferred name) in Prisma Studio
+  const demoSlug = "arcade"; 
+  
+  const clientData = await prisma.client.findUnique({
+    where: { slug: demoSlug }
+  });
 
-  return (
-    <main className="min-h-screen bg-slate-100 flex flex-col items-center justify-center p-6 text-center">
-      <div className="max-w-2xl">
-        <h1 className="text-4xl font-black text-slate-900 mb-4 tracking-tight">
-          AI Chatbot Template
-        </h1>
-        <p className="text-slate-600 text-lg">
-          This is the master preview page. Use subdomains to see specific client branding.
-        </p>
-        
-        <div className="mt-8 p-4 bg-white rounded-2xl shadow-sm border border-slate-200 inline-block text-sm text-slate-500">
-          Try visiting: <code className="bg-slate-100 px-2 py-1 rounded">flexipay.localhost:3000</code>
+  // 2. Fallback if the database is empty or the slug is wrong
+  if (!clientData) {
+    return (
+      <div className="flex h-screen items-center justify-center font-sans">
+        <div className="text-center p-8 border-2 border-dashed rounded-lg">
+          <h2 className="text-xl font-bold">Demo Setup Required</h2>
+          <p className="text-gray-500">Add a client with the slug <strong>&quot;{demoSlug}&quot;</strong> in Prisma Studio to see the demo.</p>
         </div>
       </div>
-      
-      {/* Pass the demoConfig here to satisfy TypeScript */}
-      <ChatWidget config={demoConfig} />
+    );
+  }
+
+  return (
+    <main className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
+      <div className="text-center mb-8">
+        <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-bold uppercase tracking-wider">
+          Live Demo
+        </span>
+        <h1 className="text-5xl font-black mt-4" style={{ color: clientData.primaryColor }}>
+          {clientData.name}
+        </h1>
+        <p className="text-slate-600 mt-2 max-w-md">
+          This is a preview of the AI automation platform built for {clientData.name}.
+        </p>
+      </div>
+
+      {/* Satisfies TypeScript by providing both required props */}
+      <ChatWidget clientSlug={demoSlug} config={clientData} /> 
     </main>
   );
 }

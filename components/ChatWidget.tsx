@@ -7,7 +7,7 @@ interface ChatWidgetProps {
     name: string;
     botName: string;
     primaryColor: string;
-    bookingUrl: string | null;     // Change this from 'string' to 'string | null'
+    bookingUrl: string | null;     
     initialMessage?: string | null;
   };
   clientSlug: string;
