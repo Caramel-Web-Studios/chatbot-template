@@ -1,4 +1,5 @@
 // app/page.tsx
+export const dynamic = 'force-dynamic';
 import { prisma } from "@/lib/prisma";
 import ChatWidget from "@/components/ChatWidget";
 
