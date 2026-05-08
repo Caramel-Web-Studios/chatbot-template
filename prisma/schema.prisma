@@ -10,7 +10,7 @@ datasource db {
 }
 
 model Client {
-  id             String   @id @default(uuid())
+  id             String   @id @default(cuid())
   slug           String   @unique
   name           String
   botName        String
@@ -20,4 +20,15 @@ model Client {
   leadEmail      String?
   initialMessage String?
   createdAt      DateTime @default(now())
+  leads          Lead[]
 }
+
+model Lead {
+  id        String   @id @default(cuid())
+  email     String
+  name      String?
+  client    Client   @relation(fields: [clientId], references: [id])
+  clientId  String
+  createdAt DateTime @default(now())
+}
+

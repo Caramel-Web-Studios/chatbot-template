@@ -1,7 +1,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
-import ChatWidget from '@/components/ChatWidget';
+import ChatWidget from "@/components/ChatWidget";
 
 
 export default async function ClientPage({ params }: { params: { client: string } }) {

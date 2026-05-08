@@ -7,13 +7,13 @@ interface ChatWidgetProps {
     name: string;
     botName: string;
     primaryColor: string;
-    bookingUrl: string;
-    initialMessage?: string;
+    bookingUrl: string | null;     // Change this from 'string' to 'string | null'
+    initialMessage?: string | null;
   };
   clientSlug: string;
 }
 
-export default function ChatWidget({ config }: ChatWidgetProps) {
+export default function ChatWidget({ config, clientSlug }: ChatWidgetProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
     { role: "assistant", content: config.initialMessage || `Hi! I'm your ${config.name} assistant.` }
@@ -85,7 +85,7 @@ export default function ChatWidget({ config }: ChatWidgetProps) {
                     <div className="flex flex-col gap-3">
                       <p>{m.content.replace("[BOOK_SESSION]", "")}</p>
                       <button 
-                        onClick={() => window.open(config.bookingUrl, "_blank")} 
+onClick={() => config.bookingUrl && window.open(config.bookingUrl, "_blank")}
                         style={{ backgroundColor: config.primaryColor }} 
                         className="text-white py-2 px-4 rounded-xl font-bold flex items-center justify-center gap-2 shadow-md hover:brightness-110 transition-all"
                       >
