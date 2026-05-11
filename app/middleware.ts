@@ -5,7 +5,7 @@ export function middleware(req: NextRequest) {
   const hostname = req.headers.get('host') || '';
 
   // Define your main domain (exclude local host for testing)
-  const rootDomain = 'https://chatbot-template-rho.vercel.app/';
+  const rootDomain = 'https://caramelwebstudios.com';
   
   // Extract the subdomain (e.g., "client1" from "client1.cws.com")
   const subdomain = hostname.replace(`.${rootDomain}`, '');
